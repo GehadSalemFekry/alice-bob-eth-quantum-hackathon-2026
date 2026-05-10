@@ -90,6 +90,7 @@ Explore all 100 optimization traces interactively: switch between models, drift 
   - `src/experiment_automation/` — Reward, lifetime, and calibration evaluation modules
 - `optimization.ipynb` — Main CMA-ES optimization loop and analysis
 - `notebook.ipynb` — Supplementary exploration notebook
+- `Presentation Slides.pptx` — Presentation Slides
 
 ## Tech Stack
 
