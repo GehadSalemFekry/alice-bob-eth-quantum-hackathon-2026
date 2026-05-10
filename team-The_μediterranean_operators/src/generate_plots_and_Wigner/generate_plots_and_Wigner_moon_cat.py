@@ -1,0 +1,70 @@
+"""Generate plots and Wigner GIFs for moon cat Hamiltonian."""
+
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+import jax.numpy as jnp
+import plot_expectation_value as PlotExp
+import Wigner_representation as Wrep
+import static_hamiltonians as statH
+
+
+def generate_moon_cat():
+    """Generate plots and Wigner GIFs for moon cat with parameter variations."""
+    
+    # Consistent parameters across all figures
+    g2_re = 1.0
+    eps_d_re = 4.0
+    alpha_moon_values = [0.0, 2.0]
+    lambda_values = [0.6, 1.2]
+    
+    for alpha_moon in alpha_moon_values:
+        for lam in lambda_values:
+            for initial_state in ["+z", "+x"]:
+                data_build_H = {
+                    "Hilbert_space_large": 16,
+                    "Hilbert_space_cutted_for_solution": 5,
+                    "knobs": [g2_re, 0.0, eps_d_re, 0.0, lam, 0.0],
+                    "lam": lam,
+                    "alpha_moon": alpha_moon,
+                    "hamiltonian_label": "H = g2* a†² b + g2 a² b† - εd b† - εd* b + g2 λ (a†a - α_moon²) b + h.c.",
+                }
+                
+                H = statH.build_moon_cat(data_build_H)
+                
+                # Expectation value plot
+                tfinal = 200.0 if initial_state == "+z" else 1.0
+                data_plot = {
+                    "initial_state": initial_state,
+                    "Hamiltonian": H,
+                    "kappa_a": 1.0,
+                    "kappa_b": 10.0,
+                    "tfinal": tfinal,
+                    "plotSave": f"Plots/moon_cat_alpha{alpha_moon}_{initial_state}_lambda{lam}_T{tfinal}.png",
+                }
+                data_plot.update(data_build_H)
+                
+                print(f"[PLOT] Moon cat: alpha={alpha_moon}, {initial_state}, lambda={lam}, T={tfinal}")
+                PlotExp.plot_expectation_value(data_plot)
+                
+                # Wigner GIF
+                wigner_tfinal = tfinal / 2.0
+                data_wigner = {
+                    "initial_state": initial_state,
+                    "Hamiltonian": H,
+                    "kappa_a": 1.0,
+                    "kappa_b": 10.0,
+                    "tfinal": wigner_tfinal,
+                    "nframes": 30,
+                    "frame_duration_ms": 200,
+                    "path_to_save": f"Wigner/moon_cat_alpha{alpha_moon}_{initial_state}_lambda{lam}_T{wigner_tfinal}.gif",
+                }
+                data_wigner.update(data_build_H)
+                
+                print(f"[WIGNER] Moon cat: alpha={alpha_moon}, {initial_state}, lambda={lam}, T={wigner_tfinal}, slow-fps")
+                Wrep.show_wigner_evolution(data_wigner)
+
+
+if __name__ == "__main__":
+    generate_moon_cat()

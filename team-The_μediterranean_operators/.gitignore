@@ -1,0 +1,5 @@
+__pycache__/
+AGENTS.md
+.venv/
+.DS_Store
+.extras
