@@ -39,7 +39,7 @@ This allows us to discover stable operating points automatically instead of rely
 
 We swept a combinatorial grid of **5 models × 4 drift types × 5 penalty functions = 100 configurations**, each optimized with CMA-ES over 30 epochs, and compiled into an interactive dashboard.
 
-### 5 Models (`src/models.py`)
+### 6 Models (`src/models.py`)
 
 | Key | Label | Knobs |
 |-----|-------|-------|
@@ -47,14 +47,16 @@ We swept a combinatorial grid of **5 models × 4 drift types × 5 penalty functi
 | `moon_cat` | Moon Cat | + Re(λ), Im(λ) |
 | `drift_compensated_cat` | Drift-Compensated Cat | + Δ_d |
 | `kerr_cat` | Kerr Cat | + K |
+| `crosskerr_cat` | CrossKerr Cat | + chi |
 | `effective_cat` | Effective Single-Mode Cat | Re(ε₂), Im(ε₂) |
 
-### 4 Drift Types (`src/drift_hamiltonians.py`)
+### 5 Drift Types (`src/drift_hamiltonians.py`)
 
 - **none** – No drift
 - **amplitude** – Amplitude drift on g₂
 - **frequency** – Storage frequency drift Δ(t)
-- **both** – Combined amplitude + frequency drift
+- **Kerr type drift** – Kerr type Hamiltonian K(t)
+- **Noise addition** y_Noise = y + N(0,sigma^2)
 
 ### 5 Penalty Functions (`src/objectives.py`)
 
